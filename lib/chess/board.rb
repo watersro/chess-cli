@@ -33,9 +33,17 @@ class Board
   end
 
   def display_board
+    print '    '
+    (1..8).each { |num| print " (#{num}) " }
+    print "\n"
+    print '    '
+    8.times { print '-----' }
     8.times do |x|
       y = 0
       print "\n"
+      alph = %w[a b c d e f g h]
+      print "(#{alph[x]}) "
+
       while y < 8
         if @chess_board[x][y].nil?
           print '|   |'
@@ -44,7 +52,11 @@ class Board
         end
         y += 1
       end
+      print "\n"
+      print '    '
+      8.times { print '-----' }
     end
+    print "\n"
   end
 
   private
