@@ -1,9 +1,4 @@
-# All pieces are instantiated on the board
-# When a piece is take it is removed from the board
-# When a move is made the board updates
-# The board is constrained
-
-# frozen string literal: true
+# frozen_string_literal: true
 
 require_relative 'pawn'
 require_relative 'rook'
@@ -11,8 +6,11 @@ require_relative 'bishop'
 require_relative 'knight'
 require_relative 'queen'
 require_relative 'king'
+require_relative 'move-helper'
 
+# Class that describes the game board
 class Board
+  include Move_helpers
   attr_accessor :chess_board
 
   def initialize
@@ -33,11 +31,7 @@ class Board
   end
 
   def display_board
-    print '    '
-    (1..8).each { |num| print " (#{num}) " }
-    print "\n"
-    print '    '
-    8.times { print '-----' }
+    print_helper_top
     8.times do |x|
       y = 0
       print "\n"
@@ -52,11 +46,18 @@ class Board
         end
         y += 1
       end
-      print "\n"
-      print '    '
-      8.times { print '-----' }
+      print_helper_bottom
     end
     print "\n"
+  end
+
+  def move_piece(coord)
+    coord_array = coord.split('')
+    coord_array[1] = coord_array[1].to_i
+    x = x_axis(coord_array[0])
+    y = y_axis(coord_array[1])
+    @chess_board[x][y] = nil
+    # p coord_array if coord_array[0].between?('a', 'h') && coord_array[1].between?(1, 8)
   end
 
   private
@@ -117,8 +118,24 @@ class Board
     return 'q' if @chess_board[x][y].instance_of?(Queen) && @chess_board[x][y].color == 'black'
     return 'k' if @chess_board[x][y].instance_of?(King) && @chess_board[x][y].color == 'black'
   end
+
+  def print_helper_top
+    print '    '
+    (1..8).each { |num| print " (#{num}) " }
+    print "\n"
+    print '    '
+    8.times { print '-----' }
+  end
+
+  def print_helper_bottom
+    print "\n"
+    print '    '
+    8.times { print '-----' }
+  end
 end
 
 test = Board.new
 # p test.chess_board
+test.display_board
+test.move_piece('a1')
 test.display_board
